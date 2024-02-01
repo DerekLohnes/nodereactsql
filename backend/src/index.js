@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/todos", async (req, res) => {
+  console.log("Hello from the console");
   const todos = await Todo.find();
   return res.status(200).json({
     todos,
@@ -44,12 +45,16 @@ app.delete("/todos/:id", async (req, res) => {
   return res.status(201).json({ message: "Todo deleted" });
 });
 
+const username = process.env.MONGODB_USERNAME;
+const password = process.env.MONGODB_PASSWORD;
+console.log(`${username}:${password}`)
 mongoose.connect(
-  "mongodb://mongodb:27017/todo-app",
+ `mongodb://${username}:${password}@mongodb:27017/todo-app`,
+ // "mongodb://mongodb:27017/todo-app",
   {
-    
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    authSource: 'admin'
   },
   (err) => {
     if (err) {
